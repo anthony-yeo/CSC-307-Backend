@@ -1,9 +1,9 @@
 const express = require('express');     //Import Express Module
 const app = express();                  //Create Instance of Express
 const port = 5000;                      //Define Port Number
+const cors = require('cors');
 
 //export DEBUG='express:router'
-
 const users = { 
     users_list :
     [
@@ -35,8 +35,7 @@ const users = {
     ]
  }
  
- 
-
+app.use(cors());
 app.use(express.json());                //Process Data as JSON format
 
 app.get('/', (req, res) => {            //API Endpoint
