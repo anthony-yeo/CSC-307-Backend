@@ -45,8 +45,21 @@ app.get('/', (req, res) => {            //API Endpoint
 
 app.get('/users', (req, res) => {
     const name = req.query.name;
-    if (name != undefined){
+    const job = req.query.job
+
+    if (name != undefined && job != undefined){
+        //console.log('here')
+        let result = findUserbyJobName(name, job);
+        result = {users_list: result};
+        res.send(result);
+    }
+    else if (name != undefined){
         let result = findUserByName(name);
+        result = {users_list: result};
+        res.send(result);
+    }
+    else if (job != undefined){
+        let result = findUserByJob(job);
         result = {users_list: result};
         res.send(result);
     }
@@ -57,6 +70,14 @@ app.get('/users', (req, res) => {
 
 const findUserByName = (name) =>{
     return users['users_list'].filter( (user) => user['name'] === name);
+}
+
+const findUserByJob = (job) =>{
+    return users['users_list'].filter( (user) => user['job'] === job);
+}
+
+const findUserbyJobName = (name, job) => {
+    return users['users_list'].filter( (user) => user['name'] === name && user['job'] == job);
 }
 
 app.get('/users/:id', (req, res) => {
@@ -83,6 +104,16 @@ app.post('/users', (req, res) => {
 
 function addUser(user){
     users['users_list'].push(user);
+}
+
+app.delete('/users', (req, res) => {
+    const userToDel = req.body
+    delUser(userToDel)
+    res.status(200).end()
+});
+
+function delUser(user){
+    users['users_list'].pop(user);
 }
 
 
