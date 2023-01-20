@@ -97,22 +97,40 @@ function findUserById(id){
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    req.body.id = makeId(6)
+    console.log(req.body.id)
     addUser(userToAdd);
     res.status(201).end();
 });
 
 function addUser(user){
+    //console.log(user.id)
     users['users_list'].push(user);
 }
 
-app.delete('/users', (req, res) => {
-    const userToDel = req.body
-    delUser(userToDel)
-    res.status(200).end()
+function makeId(length){
+    let result = '';
+    let characters = 'abcdefghijklmnopqrstuvzwyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++){
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+app.delete('/users/:id', (req, res) => {
+    const id = req.params['id'];
+    delUser(id)
+    res.status(204).end();
 });
 
-function delUser(user){
-    users['users_list'].pop(user);
+function delUser(id){
+    let x = FindUserByIdDelete(id);
+    users['users_list'].splice(x, 1);
+}
+
+function FindUserByIdDelete(id){
+    return users['users_list'].findIndex((user) => user['id'] === id);
 }
 
 
