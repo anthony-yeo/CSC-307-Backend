@@ -96,11 +96,11 @@ function findUserById(id){
 }
 
 app.post('/users', (req, res) => {
-    const userToAdd = req.body;
     req.body.id = makeId(6)
+    const userToAdd = req.body;
     console.log(req.body.id)
     addUser(userToAdd);
-    res.status(201).end();
+    res.status(201).send(userToAdd).end();
 });
 
 function addUser(user){
